@@ -5,7 +5,7 @@
 ## Installation
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<ton-user>/opencode-setup/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Sunderrrr/opencode-setup/main/install.sh | bash
 ```
 
 ## Utilisation
