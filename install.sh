@@ -2,7 +2,7 @@
 set -euo pipefail
 
 OPENCODE_CONFIG="${OPENCODE_CONFIG:-$HOME/.config/opencode}"
-MCP_SERVER_DIR="${OPENCODE_CONFIG}/mcp-servers/opencode-setup"
+PLUGINS_DIR="${OPENCODE_CONFIG}/plugins"
 COMMANDS_DIR="${OPENCODE_CONFIG}/commands"
 
 echo "╭────────────────────────────╮"
@@ -10,70 +10,55 @@ echo "│  OpenCode Setup Installer  │"
 echo "╰────────────────────────────╯"
 echo ""
 
-# Detect package manager
-if command -v uv &>/dev/null; then
-  INSTALL_CMD="uv tool install"
-elif command -v pipx &>/dev/null; then
-  INSTALL_CMD="pipx install"
-elif command -v pip &>/dev/null; then
-  echo "⚠ Using pip — consider uv or pipx for isolation"
-  INSTALL_CMD="pip install"
-else
-  echo "✗ Need Python (uv, pipx, or pip)"
-  exit 1
-fi
+REPO="${REPO:-Sunderrrr/opencode-setup}"
+BRANCH="${BRANCH:-main}"
+RAW="https://raw.githubusercontent.com/$REPO/$BRANCH"
 
-# 1. Install the MCP server
-echo "→ Installing opencode-setup MCP server..."
-if [ "$INSTALL_CMD" = "uv tool install" ]; then
-  uv tool install --reinstall "$(dirname "$0")/mcp-server" 2>&1 | tail -3
-elif [ "$INSTALL_CMD" = "pipx install" ]; then
-  pipx install "$(dirname "$0")/mcp-server" 2>&1 | tail -3
-else
-  pip install -e "$(dirname "$0")/mcp-server" 2>&1 | tail -3
-fi
+# 1. Install plugin
+echo "→ Installing plugin..."
+mkdir -p "$PLUGINS_DIR"
+curl -fsSL "$RAW/plugin/index.js" -o "$PLUGINS_DIR/opencode-setup.js"
+echo "  ✓ Plugin installed → $PLUGINS_DIR/opencode-setup.js"
 
-# 2. Install the command
+# 2. Install /setup command
 echo "→ Installing /setup command..."
 mkdir -p "$COMMANDS_DIR"
-cp "$(dirname "$0")/commands/setup.md" "$COMMANDS_DIR/setup.md"
+curl -fsSL "$RAW/commands/setup.md" -o "$COMMANDS_DIR/setup.md"
+echo "  ✓ Command installed → $COMMANDS_DIR/setup.md"
 
-# 3. Add to opencode.jsonc
+# 3. Add plugin to opencode.jsonc
 CONFIG_FILE="${OPENCODE_CONFIG}/opencode.jsonc"
+PLUGIN_NAME="@sunderrrr/opencode-setup"
+
 if [ -f "$CONFIG_FILE" ]; then
-  echo "→ Adding MCP server to opencode.jsonc..."
+  echo "→ Updating opencode.jsonc..."
   python3 -c "
 import json
 config = json.load(open('$CONFIG_FILE'))
-if 'mcp' not in config:
-    config['mcp'] = {}
-config['mcp']['opencode-setup'] = {
-    'command': 'opencode-setup',
-    'args': [],
-    'type': 'stdio',
-    'enabled': True
-}
+
+# Add plugin
+if 'plugin' not in config:
+    config['plugin'] = []
+if '$PLUGIN_NAME' not in config['plugin']:
+    config['plugin'].append('$PLUGIN_NAME')
+
+# Add /setup command
 if 'command' not in config:
     config['command'] = {}
-config['command']['setup'] = {
-    'description': 'Analyze project and recommend tools, MCP servers, skills'
-}
+if 'setup' not in config['command']:
+    config['command']['setup'] = {
+        'description': 'Analyze project and recommend tools, MCP servers, skills'
+    }
+
 json.dump(config, open('$CONFIG_FILE', 'w'), indent=2)
-print('✓ Updated opencode.jsonc')
+print('  ✓ Config updated')
 " 2>&1
 else
   echo "→ Creating opencode.jsonc..."
-  cat > "$CONFIG_FILE" << 'JSON'
+  cat > "$CONFIG_FILE" << JSON
 {
-  "$schema": "https://opencode.ai/config.json",
-  "mcp": {
-    "opencode-setup": {
-      "command": "opencode-setup",
-      "args": [],
-      "type": "stdio",
-      "enabled": true
-    }
-  },
+  "\$schema": "https://opencode.ai/config.json",
+  "plugin": ["$PLUGIN_NAME"],
   "command": {
     "setup": {
       "description": "Analyze project and recommend tools, MCP servers, skills"
@@ -81,14 +66,17 @@ else
   }
 }
 JSON
-  fi
+  echo "  ✓ Config created"
+fi
 
 echo ""
-echo "✓ Installation terminée !"
+echo "╰────────────────────────────╯"
+echo "  Installation terminée !"
 echo ""
-echo "Pour utiliser :"
+echo "  Pour utiliser :"
 echo "  1. Lance OpenCode"
-echo "  2. Tape /setup"
+echo "  2. Tape /setup (ou utilise l'outil opencode-setup dans le chat)"
 echo ""
-echo "Ou directement :"
-echo "  opencode-setup scan /chemin/vers/projet"
+echo "  Le plugin ajoute un outil 'opencode-setup' qui analyse"
+echo "  ton projet et recommande les configs adaptées."
+echo "╭────────────────────────────╯"

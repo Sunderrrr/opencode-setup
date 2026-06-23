@@ -1,0 +1,12 @@
+{
+  "name": "@sunderrrr/opencode-setup",
+  "version": "1.0.0",
+  "description": "OpenCode Setup — Analyze projects and recommend MCP servers, tools, skills, and agents",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "keywords": ["opencode", "plugin", "setup", "mcp", "tools"],
+  "license": "MIT"
+}

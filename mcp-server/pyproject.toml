@@ -1,9 +1,0 @@
-[project]
-name = "opencode-setup"
-version = "1.0.0"
-description = "OpenCode Setup — Analyzes projects and recommends MCP servers, tools, skills, and agents"
-requires-python = ">=3.10"
-dependencies = ["httpx>=0.25", "beautifulsoup4>=4.12"]
-
-[project.scripts]
-opencode-setup = "opencode_setup.server:main"
