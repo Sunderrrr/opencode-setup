@@ -34,11 +34,23 @@ opencode-setup/
 
 ## Installation
 
+### npm (recommended)
+
+```bash
+npx @sunderrrr/opencode-setup
+```
+
+Cross-platform. Installs the skill, the `/setup` command, and the `project-scan`
+plugin into `~/.config/opencode/`. Override the target with
+`OPENCODE_CONFIG=/path npx @sunderrrr/opencode-setup`.
+
+### curl
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Sunderrrr/opencode-setup/main/install.sh | bash
 ```
 
-Installs the skill, the `/setup` command, and the `project-scan` plugin into `~/.config/opencode/`.
+Both methods install the same files into `~/.config/opencode/`.
 
 ## Usage
 
@@ -59,8 +71,27 @@ what plugins/hooks should I use?
 ## Requirements
 
 - OpenCode 1.17+
-- `curl` (for installation); Node/Bun is provided by OpenCode for the plugin
+- Node 18+ (for `npx`); or `curl` for the shell installer
+
+## Publishing (maintainers)
+
+Releases are published to npm automatically by
+[`.github/workflows/publish.yml`](.github/workflows/publish.yml) when a GitHub
+Release is published. One-time setup:
+
+1. Create an npm **automation** access token (npmjs.com → Access Tokens).
+2. Add it as the repo secret `NPM_TOKEN` (Settings → Secrets and variables → Actions).
+3. Bump `version` in `package.json`, then publish a GitHub Release tagged `vX.Y.Z`
+   (the tag must match the package version). The workflow runs `npm publish` with
+   provenance enabled.
+
+To publish manually instead:
+
+```bash
+npm publish   # uses publishConfig.access=public + provenance
+```
 
 ## License
 
 MIT
+

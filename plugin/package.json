@@ -1,12 +1,9 @@
 {
-  "name": "@sunderrrr/opencode-setup",
+  "name": "@sunderrrr/opencode-setup-plugin",
   "version": "1.0.0",
-  "description": "OpenCode Setup — Analyze projects and recommend MCP servers, tools, skills, and agents",
+  "private": true,
+  "description": "Internal: marks plugin/index.js as ESM so the project-scan plugin loads correctly. The published package is @sunderrrr/opencode-setup at the repo root.",
   "type": "module",
   "main": "index.js",
-  "exports": {
-    ".": "./index.js"
-  },
-  "keywords": ["opencode", "plugin", "setup", "mcp", "tools"],
   "license": "MIT"
 }
