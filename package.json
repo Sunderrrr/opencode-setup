@@ -1,0 +1,47 @@
+{
+  "name": "@sunderrrr/opencode-setup",
+  "version": "1.0.0",
+  "description": "Analyze a codebase and recommend tailored OpenCode automations (MCP servers, skills, subagents, commands, plugins). A faithful, OpenCode-adapted reproduction of Anthropic's claude-code-setup.",
+  "type": "module",
+  "bin": {
+    "opencode-setup": "bin/install.mjs"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "command/",
+    "plugin/index.js",
+    "install.sh",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "install:local": "node bin/install.mjs"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "skill",
+    "setup",
+    "mcp",
+    "automation",
+    "recommender"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sunderrrr/opencode-setup.git"
+  },
+  "homepage": "https://github.com/Sunderrrr/opencode-setup#readme",
+  "bugs": {
+    "url": "https://github.com/Sunderrrr/opencode-setup/issues"
+  },
+  "author": "Sunderrrr",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
