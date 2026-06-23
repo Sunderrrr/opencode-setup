@@ -73,24 +73,6 @@ what plugins/hooks should I use?
 - OpenCode 1.17+
 - Node 18+ (for `npx`); or `curl` for the shell installer
 
-## Publishing (maintainers)
-
-Releases are published to npm automatically by
-[`.github/workflows/publish.yml`](.github/workflows/publish.yml) when a GitHub
-Release is published. One-time setup:
-
-1. Create an npm **automation** access token (npmjs.com → Access Tokens).
-2. Add it as the repo secret `NPM_TOKEN` (Settings → Secrets and variables → Actions).
-3. Bump `version` in `package.json`, then publish a GitHub Release tagged `vX.Y.Z`
-   (the tag must match the package version). The workflow runs `npm publish` with
-   provenance enabled.
-
-To publish manually instead:
-
-```bash
-npm publish   # uses publishConfig.access=public + provenance
-```
-
 ## License
 
 MIT
